@@ -1,0 +1,78 @@
+<!DOCTYPE html><meta charset="UTF-8">
+<html><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script src="js/pkc_api.js"></script>
+</head><body>
+<div class="container"><div class="row"><button type="button" id="run" onclick="run();">Run</button></div></div>
+<script>
+    function run()
+    {
+        //Public_key and Private_key
+        var pub_key ="-----BEGIN PUBLIC KEY-----\n" +
+            "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDHwX1LNgFVV5Oj+arW8PUOWuEb\n" +
+            "zYSFZsnhJkVgGxV+bney34dPhx44JT6UBhvmqxXDnUsB81L2lchiJcD/zIh5C3ru\n" +
+            "pc/ypJO3PVyiYVOEMxo1bg/SxEp/2OUk/nNTWBWXSCSH59/oPlXNxN0Vzfw6kMOd\n" +
+            "uOSvTel6kFaZAtOs9QIDAQAB\n" +
+            "-----END PUBLIC KEY-----";
+        var pri_key = "-----BEGIN RSA PRIVATE KEY-----\n" +
+            "MIICXgIBAAKBgQDHwX1LNgFVV5Oj+arW8PUOWuEbzYSFZsnhJkVgGxV+bney34dP\n" +
+            "hx44JT6UBhvmqxXDnUsB81L2lchiJcD/zIh5C3rupc/ypJO3PVyiYVOEMxo1bg/S\n" +
+            "xEp/2OUk/nNTWBWXSCSH59/oPlXNxN0Vzfw6kMOduOSvTel6kFaZAtOs9QIDAQAB\n" +
+            "AoGBAJRk611qO0dZDfcszHts+b+2R7DN1nr7x1GZisRAmpEYI5ggcnbkG9D96iUw\n" +
+            "/J05z6tIOKa0Speg4gH3pg7htSdXBUc7kmDgoAViDUYWsY3jCsLShOzGns6izcrb\n" +
+            "LHFXjy05Q6rw+P5eo499xR7cqRHSYWB5xB1HL23Sx1Y722lpAkEA5/PH4klbaFEW\n" +
+            "yJoYm42pMPmDgcSx8mPmAItBdRaSQaaXT0uEzfpmyuVAnBsr52E8JG0DbybZlC8q\n" +
+            "I2zX/0tdKwJBANx3L61b+d+orXbm3GkNSkdlSJLlJ5hIpiQLs45JpK7S1pPKjQ/i\n" +
+            "oK0Md2eEFakbJ4DGm6jhSmMkjkVoUtvrTl8CQQCwjzJRn4FC0KbFH/cnQRfOvb9K\n" +
+            "okzJsx06wMWcuQevjX2T0GpQ2BAy1Xru2Qf8YlmDaK+6hhoM4DH1MT7hh55tAkEA\n" +
+            "0aTEwaVkxzovOZHupjbtG1dE2+rs6/Kpij1WUUfWQihbw84otaJcCDKCmP0RW+1m\n" +
+            "cx5phv41LnHkmDvMDzSDIQJAdfP5oSrTB2pnJE9sAPGxmEcVA4Zllis5xNpt30nI\n" +
+            "9c8GTEypdoccnnFa0VaP7sMzGjbIx8F7EiJ+sEmGhJJcBQ==\n" +
+            "-----END RSA PRIVATE KEY-----";
+
+        var mydata = {};
+        mydata['d']='U0014964048#200';
+        mydata['dt']={};
+        mydata['dt']['rk']='random_key_test';
+        mydata['dt']['tm'] = '1522678513';
+
+        /*example of RSA*/
+        /*load key.*/
+        var prsa = new Prsa();
+        prsa.load_pub(pub_key);//If it is called after load_pri,the private_key will be removed.
+        prsa.load_pri(pri_key);//automatically will load public_key
+
+        /*pri_encrypt and pub_decrypt*/
+        var cstr='';
+        var ttt = '';
+        cstr = prsa.pri_encrypt('0123456789\n012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789');
+        ttt = prsa.pub_decrypt(cstr);
+
+        /*pub_encrypt and pri_decrypt*/
+        cstr = prsa.pub_encrypt(JSON.stringify(mydata));
+        ttt = prsa.pri_decrypt(cstr);
+
+        /*pri_encrypt and pub_decrypt for very long data*/
+        var long_data = pri_key + pri_key + pri_key;//just make a very long string
+        cstr = prsa.pri_encrypt(long_data);
+        ttt = prsa.pub_decrypt(cstr);
+        /*pub_encrypt and pri_decrypt*/
+        cstr = prsa.pub_encrypt(long_data);
+        ttt = prsa.pri_decrypt(cstr);
+
+        /*base_64*/
+        ttt = prsa.base64_decode(prsa.base64_encode('Howdy'));
+
+        /*hash*/
+        ttt = prsa.hash('Howdy');
+
+        /*AES*/
+        cstr = prsa.aes_encrypt('key_abc','Howdy');
+        ttt = prsa.aes_decrypt('key_abc',cstr);
+
+        /*AES long data*/
+        cstr = prsa.aes_encrypt(long_data,long_data);
+        ttt = prsa.aes_decrypt(long_data,cstr);
+    }
+</script>
+</body></html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="/js/pkc_api.js"></script>
+    <script type="text/javascript" src="/js/pkc_html.js"></script>
+    <script type="text/javascript" src="/js/qrcodejs/qrcode.js"></script>
+
+</head>
+
+<body>
+
+<input type='file'  onchange="pkc_open_file(event,f_onload)"><br>
+<script>
+
+    function pkc_open_file (event,f_onload)
+    {
+        var input = event.target;
+        var reader = new FileReader();
+        reader.onload=function(){
+            var data = this.result;
+            var ret = {};
+            ret['pri_key']='pri';
+            ret['pub_key']='pub';
+            //pop-out password input dialog
+            var pw = prompt("Password for open the private_key file","");
+            if (pw == null){
+                alert("Without password, you can't Parse the file");
+                return;
+            }
+            //Parse the private file
+            var prsa = new Prsa();
+            var c_file = prsa.base64_decode(data);
+            var djson = prsa.aes_decrypt(pw,c_file);
+            var fdata = JSON.parse(djson);
+            // $rpw = $p->pub_encrypt_strkey($this->pub_key, $p->hash($pwd));
+            // $prif['prk'] = $p->base64url_encode($p->aes_encrypt($rpw, $pri_key));
+            // var pri_key1 = fdata['prk'];
+            // var output = document.getElementById('output');
+            f_onload(ret)
+        }
+        reader.readAsBinaryString(input.files[0]);
+    }
+
+    function f_onload(keys){
+        //The result of private_key_file
+        alert(data);
+    }
+
+</script>
+
+
+</body>
+</html>

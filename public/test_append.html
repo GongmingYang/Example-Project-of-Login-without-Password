@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>append demo</title>
+    <style>
+        p {
+            background: yellow;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<body>
+<input type="text" id="test_input">
+<input type='button' value='添加'/>
+<!--<p>I would like to say: </p>-->
+<div id="xx"></div>
+<script>
+    $( "#xx" ).append( document.createTextNode( "Hello" ) );
+    $( "#xx" ).append("<strong>Hellodddd</strong>" );
+
+    $(function(){
+        $("input[type='button']").click(function() {
+            new_obj = $("<input type='text'>");
+            $(this).before(new_obj);
+        });
+    });
+</script>
+
+</body>
+</html>

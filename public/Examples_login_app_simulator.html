@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="/js/pkc_api.js"></script>
+    <script type="text/javascript" src="/js/pkc_html.js"></script>
+    <script type="text/javascript" src="/js/qrcodejs/qrcode.js"></script>
+
+</head>
+
+<body>
+<div class="container">
+    <div class="row">
+    <input type="text" id="input1" class="col-xs-11 "  value="pkc001@pkc.com"/>
+    <input type="text" id="input2" class="col-xs-11 " value=""/>
+
+    <label type="text" id="--" class="col-xs-12 " />
+
+    <textarea type="text" id="ret1" class="col-xs-12  " style="width:500px; height:100px; margin-top:15px;" ></textarea>
+    <textarea type="text" id="ret2" class="col-xs-12  " style="width:500px; height:100px; margin-top:15px;"></textarea>
+
+    <label type="text" id="---" class="col-xs-12 col-sm-12" />
+    <button type="button" id="run" onclick="run();">Run</button>
+
+    </div></div>
+<script>
+
+    function run()
+    {
+        //U0014964048#200
+        var pub_key ="-----BEGIN PUBLIC KEY-----\n" +
+            "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDHwX1LNgFVV5Oj+arW8PUOWuEb\n" +
+            "zYSFZsnhJkVgGxV+bney34dPhx44JT6UBhvmqxXDnUsB81L2lchiJcD/zIh5C3ru\n" +
+            "pc/ypJO3PVyiYVOEMxo1bg/SxEp/2OUk/nNTWBWXSCSH59/oPlXNxN0Vzfw6kMOd\n" +
+            "uOSvTel6kFaZAtOs9QIDAQAB\n" +
+            "-----END PUBLIC KEY-----";
+        var pri_key = "-----BEGIN RSA PRIVATE KEY-----\n" +
+            "MIICXgIBAAKBgQDHwX1LNgFVV5Oj+arW8PUOWuEbzYSFZsnhJkVgGxV+bney34dP\n" +
+            "hx44JT6UBhvmqxXDnUsB81L2lchiJcD/zIh5C3rupc/ypJO3PVyiYVOEMxo1bg/S\n" +
+            "xEp/2OUk/nNTWBWXSCSH59/oPlXNxN0Vzfw6kMOduOSvTel6kFaZAtOs9QIDAQAB\n" +
+            "AoGBAJRk611qO0dZDfcszHts+b+2R7DN1nr7x1GZisRAmpEYI5ggcnbkG9D96iUw\n" +
+            "/J05z6tIOKa0Speg4gH3pg7htSdXBUc7kmDgoAViDUYWsY3jCsLShOzGns6izcrb\n" +
+            "LHFXjy05Q6rw+P5eo499xR7cqRHSYWB5xB1HL23Sx1Y722lpAkEA5/PH4klbaFEW\n" +
+            "yJoYm42pMPmDgcSx8mPmAItBdRaSQaaXT0uEzfpmyuVAnBsr52E8JG0DbybZlC8q\n" +
+            "I2zX/0tdKwJBANx3L61b+d+orXbm3GkNSkdlSJLlJ5hIpiQLs45JpK7S1pPKjQ/i\n" +
+            "oK0Md2eEFakbJ4DGm6jhSmMkjkVoUtvrTl8CQQCwjzJRn4FC0KbFH/cnQRfOvb9K\n" +
+            "okzJsx06wMWcuQevjX2T0GpQ2BAy1Xru2Qf8YlmDaK+6hhoM4DH1MT7hh55tAkEA\n" +
+            "0aTEwaVkxzovOZHupjbtG1dE2+rs6/Kpij1WUUfWQihbw84otaJcCDKCmP0RW+1m\n" +
+            "cx5phv41LnHkmDvMDzSDIQJAdfP5oSrTB2pnJE9sAPGxmEcVA4Zllis5xNpt30nI\n" +
+            "9c8GTEypdoccnnFa0VaP7sMzGjbIx8F7EiJ+sEmGhJJcBQ==\n" +
+            "-----END RSA PRIVATE KEY-----";
+
+
+        var prsa = new Prsa();
+        prsa.load_pub(pub_key);
+        prsa.load_pri(pri_key);
+
+        //U4720890229#400  howdypay's server
+        var srv_pub = "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDRWUKY0c/UqG7BG0cd7c2902Ez\n4vXh1VsvdWabGcdTCE8DeFbIYSI/pe52OApRU5u1vwEUBeNviLoHz7HLyVdR0QxK\nWQhsymLB3g85Ca42NpEbk/hHQsmxUE2s1ca8LmPtCD1sTT2vgh2sYIkRMkRi9AE9\nkSt9b/tsyeWR4VDr1QIDAQAB\n-----END PUBLIC KEY-----";
+        var prsa_s = new Prsa();
+        prsa_s.load_pub(srv_pub);
+
+        var mydata = {};
+        var dt = {};
+        var tm=new Date();
+
+        ////{'d':simulator_guid#key,'dt':{'tid':token_id,'tm':time(),'rk':randomKey}<simulator_pri><howdyPay_server_pub><base_64>}
+        // 'd' means the guid  and keyid of
+        mydata['d']='U0014964048#200';
+        dt['tid']='test_token_id123';
+
+        dt['tm'] = '1522678513';
+        dt['rk']='random_key_test';
+
+        /*example of RSA*/
+        /*load key.*/
+        var prsa = new Prsa();
+        prsa.load_pub(pub_key);//If it is called after load_pri,the private_key will be removed.
+        prsa.load_pri(pri_key);//automatically will load public_key
+
+        mydata['dt']=prsa_s.pub_encrypt(prsa.base64_decode( prsa.pri_encrypt(JSON.stringify(dt))));
+
+        pkcajax('http://www.howdypay.com/login/l', mydata, function fn_ok(data,a,b,c)
+        {
+            var prsa = new Prsa();
+            jQuery('#ret1').val('');
+        }, function fn_fail(data) {
+            console.log(data);
+            jQuery('#ret2').val(JSON.stringify(data));
+        });
+    }
+</script>
+</body>
+</html>

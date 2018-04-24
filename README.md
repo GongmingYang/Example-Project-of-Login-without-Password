@@ -15,14 +15,22 @@ API include:
        QAction()
       
    The key code is (you can check LoginControler.php for details):
+   
        $p = new prsa();
+       
        /*get {'tid':token_id,'tm':time(),'rk':randomKey}<app_pri> using Server_pri_key*/
+       
         $n_dt1 = $p->pri_decrypt_strkey(Server_pri_key, base64_decode($n_dt));
+        
        /*Try to decode {'tid':token_id,'tm':time(),'rk':randomKey} using $app_pub_key
+       
         * If $n_dt is normal json code, we can say it is valid user who is the holder of this app_pub_key
+        
         * */
         $n_dt = json_decode($p->pub_decrypt_strkey($app_pub_key, $n_dt1),true);
+        
     If $n_dt is normal array, then , the passwordless should be good.
+    
     
     
     Gongming

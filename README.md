@@ -1,4 +1,11 @@
-# Recoder_API
+# API: we use a recorder for the example
+/*
+* This project is runable code package, we can check the example by type www.howdypay.com in your blowser.
+* the default username and password is : test1 password1
+* this project is just for test the API.
+*/
+###############################################################################
+
 This is the Example of how to use the API provided by the www.publickeycenter.com
 It includes:
      1. Tranditional login with username+password
@@ -29,7 +36,7 @@ API include:
         * */
         $n_dt = json_decode($p->pub_decrypt_strkey($app_pub_key, $n_dt1),true);
         
-    If $n_dt is normal array, then , the passwordless should be good.
+    If $n_dt is a normal array, then , the passwordless should be good.
     
     
     
